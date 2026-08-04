@@ -1,22 +1,27 @@
 class Solution:
-    def permute(self, nums: List[int]) -> List[List[int]]:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+
         res = []
         cur = []
 
-        def backtrack():
-            if len(cur) == len(nums):
+        def dfs(i):
+            if i >= len(nums):
                 res.append(cur.copy())
                 return
 
-            for num in nums:
-                if num in cur:
-                    continue
+            # Take nums[i]
+            cur.append(nums[i])
+            dfs(i + 1)
 
-                cur.append(num)
+            # Don't take nums[i]
+            cur.pop()
 
-                backtrack()
+            # Skip duplicates
+            while i + 1 < len(nums) and nums[i] == nums[i + 1]:
+                i += 1
 
-                cur.pop()
+            dfs(i + 1)
 
-        backtrack()
+        dfs(0)
         return res
